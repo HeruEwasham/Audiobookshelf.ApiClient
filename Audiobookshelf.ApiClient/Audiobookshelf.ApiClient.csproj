@@ -10,6 +10,7 @@
     <None Remove="Requests\" />
     <None Remove="Responses\" />
     <None Remove="Dto\Filters\" />
+    <None Remove="Dto\Stats\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Dto\" />
@@ -17,6 +18,7 @@
     <Folder Include="Requests\" />
     <Folder Include="Responses\" />
     <Folder Include="Dto\Filters\" />
+    <Folder Include="Dto\Stats\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />

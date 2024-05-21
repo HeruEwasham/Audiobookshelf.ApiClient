@@ -3,6 +3,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
+using System.Web;
 using Audiobookshelf.ApiClient.Dto;
 using Audiobookshelf.ApiClient.Dto.Filters;
 using Audiobookshelf.ApiClient.Requests;
@@ -225,7 +226,7 @@ namespace Audiobookshelf.ApiClient
             {
                 query += $"&include={include}";
             }
-            return await _httpClient.GetAsync<GetLibraryItemResponse<TLibraryItemType>>($"/api/libraries/{id}?limit={limit}&page={page}&desc={sortByDesc}&minified={minified.ToInt()}&collapseseries={collapseseries.ToInt()}{query}");
+            return await _httpClient.GetAsync<GetLibraryItemResponse<TLibraryItemType>>($"/api/libraries/{id}/items?limit={limit}&page={page}&desc={sortByDesc}&minified={minified.ToInt()}&collapseseries={collapseseries.ToInt()}{query}");
         }
 
         /// <summary>
@@ -307,6 +308,230 @@ namespace Audiobookshelf.ApiClient
         public async Task<Response<GetPodcastLibraryEpisodeDownloadResponse>> GetPodcastLibraryEpisodeDownload(string id)
         {
             return await _httpClient.GetAsync<GetPodcastLibraryEpisodeDownloadResponse>($"/api/libraries/{id}/episode-downloads");
+        }
+
+        #region Libraries_GetLibrarySeries
+        /// <summary>
+        /// This endpoint returns a library's series. Optionally sorted and/or filtered.
+        ///
+        /// This is an endpoint that gives all the options and let you choose pretty much what type of response you want. This is because there are so many different options available as what is sent in.
+        /// The most used responses have their own endpoints that can be used if you don't want to find every type that can be returned for every settings.
+        /// </summary>
+        /// <typeparam name="TLibraryItemType">The type of library item returned. The most common is if it is LibraryItem for Book or LibraryItem for Podcast or one of it's minified versions. But some combinations of settings may also send other or different attributes as well.</typeparam>
+        /// <param name="id">The ID of the library.</param>
+        /// <param name="limit">Limit the number of returned results per page. If 0, no limit will be applied.</param>
+        /// <param name="page">The page number (0 indexed) to request. If there is no limit applied, then page will have no effect and all results will be returned.</param>
+        /// <param name="sortBy">What to sort the results by. Specify the attribute to sort by using JavaScript object notation. For example, to sort by title use sort=media.metadata.title. When filtering for a series, sort can also be sequence.</param>
+        /// <param name="sortByDesc">Whether to reverse the sort order.</param>
+        /// <param name="filter">What to filter the results by.</param>
+        /// <param name="minified">Whether to request minified objects.</param>
+        /// <param name="include">A comma separated list of what to include with the library items. The only current option is rssfeed.</param>
+        /// <returns></returns>
+        public async Task<Response<GetLibraryItemResponse<SeriesBooks<TLibraryItemType>>>> GetLibrarySeries<TLibraryItemType>(string id, int limit = 0, int page = 0, string sortBy = null, bool sortByDesc = false, IFilter filter = null, bool minified = false, string include = null)
+        {
+            var query = string.Empty;
+            if (sortBy != null)
+            {
+                query += $"&sort={sortBy}";
+            }
+            if (filter != null)
+            {
+                query += $"&filter={filter.ToFilterText()}";
+            }
+            if (include != null)
+            {
+                query += $"&include={include}";
+            }
+            return await _httpClient.GetAsync<GetLibraryItemResponse<SeriesBooks<TLibraryItemType>>>($"/api/libraries/{id}/series?limit={limit}&page={page}&desc={sortByDesc}&minified={minified.ToInt()}{query}");
+        }
+
+        /// <summary>
+        /// This endpoint returns a library's series. Optionally sorted and/or filtered.
+        /// </summary>
+        /// <param name="id">The ID of the library.</param>
+        /// <param name="limit">Limit the number of returned results per page. If 0, no limit will be applied.</param>
+        /// <param name="page">The page number (0 indexed) to request. If there is no limit applied, then page will have no effect and all results will be returned.</param>
+        /// <param name="sortBy">What to sort the results by. Specify the attribute to sort by using JavaScript object notation. For example, to sort by title use sort=media.metadata.title. When filtering for a series, sort can also be sequence.</param>
+        /// <param name="sortByDesc">Whether to reverse the sort order.</param>
+        /// <param name="filter">What to filter the results by.</param>
+        /// <returns></returns>
+        public async Task<Response<GetLibraryItemResponse<SeriesBooks<BookLibraryItem>>>> GetBookLibrarySeries(string id, int limit = 0, int page = 0, string sortBy = null, bool sortByDesc = false, IFilter filter = null)
+        {
+            return await GetLibrarySeries<BookLibraryItem>(id, limit, page, sortBy, sortByDesc, filter, false, null);
+        }
+
+        /// <summary>
+        /// This endpoint returns a library's series. Optionally sorted and/or filtered.
+        /// </summary>
+        /// <param name="id">The ID of the library.</param>
+        /// <param name="limit">Limit the number of returned results per page. If 0, no limit will be applied.</param>
+        /// <param name="page">The page number (0 indexed) to request. If there is no limit applied, then page will have no effect and all results will be returned.</param>
+        /// <param name="sortBy">What to sort the results by. Specify the attribute to sort by using JavaScript object notation. For example, to sort by title use sort=media.metadata.title. When filtering for a series, sort can also be sequence.</param>
+        /// <param name="sortByDesc">Whether to reverse the sort order.</param>
+        /// <param name="filter">What to filter the results by.</param>
+        /// <returns></returns>
+        public async Task<Response<GetLibraryItemResponse<SeriesBooks<BookLibraryItemMinified>>>> GetBookLibrarySeriesMinified(string id, int limit = 0, int page = 0, string sortBy = null, bool sortByDesc = false, IFilter filter = null)
+        {
+            return await GetLibrarySeries<BookLibraryItemMinified>(id, limit, page, sortBy, sortByDesc, filter, true, null);
+        }
+        #endregion
+
+        #region Libraries_GetLibraryCollections
+        /// <summary>
+        /// This endpoint returns a library's collections. Optionally sorted and/or filtered.
+        ///
+        /// This is an endpoint that gives all the options and let you choose pretty much what type of response you want. This is because there are so many different options available as what is sent in.
+        /// The most used responses have their own endpoints that can be used if you don't want to find every type that can be returned for every settings.
+        /// </summary>
+        /// <typeparam name="TLibraryItemType">The type of library item returned. The most common is if it is LibraryItem for Book or LibraryItem for Podcast or one of it's minified versions. But some combinations of settings may also send other or different attributes as well.</typeparam>
+        /// <param name="id">The ID of the library.</param>
+        /// <param name="limit">Limit the number of returned results per page. If 0, no limit will be applied.</param>
+        /// <param name="page">The page number (0 indexed) to request. If there is no limit applied, then page will have no effect and all results will be returned.</param>
+        /// <param name="sortBy">What to sort the results by. Specify the attribute to sort by using JavaScript object notation. For example, to sort by title use sort=media.metadata.title. When filtering for a series, sort can also be sequence.</param>
+        /// <param name="sortByDesc">Whether to reverse the sort order.</param>
+        /// <param name="filter">What to filter the results by.</param>
+        /// <param name="minified">Whether to request minified objects.</param>
+        /// <param name="include">A comma separated list of what to include with the library items. The only current option is rssfeed.</param>
+        /// <returns></returns>
+        public async Task<Response<GetLibraryItemResponse<TLibraryItemType>>> GetLibraryCollections<TLibraryItemType>(string id, int limit = 0, int page = 0, string sortBy = null, bool sortByDesc = false, IFilter filter = null, bool minified = false, string include = null)
+        {
+            var query = string.Empty;
+            if (sortBy != null)
+            {
+                query += $"&sort={sortBy}";
+            }
+            if (filter != null)
+            {
+                query += $"&filter={filter.ToFilterText()}";
+            }
+            if (include != null)
+            {
+                query += $"&include={include}";
+            }
+            return await _httpClient.GetAsync<GetLibraryItemResponse<TLibraryItemType>>($"/api/libraries/{id}/collections?limit={limit}&page={page}&desc={sortByDesc}&minified={minified.ToInt()}{query}");
+        }
+
+        /// <summary>
+        /// This endpoint returns a library's collections. Optionally sorted and/or filtered.
+        /// </summary>
+        /// <param name="id">The ID of the library.</param>
+        /// <param name="limit">Limit the number of returned results per page. If 0, no limit will be applied.</param>
+        /// <param name="page">The page number (0 indexed) to request. If there is no limit applied, then page will have no effect and all results will be returned.</param>
+        /// <param name="sortBy">What to sort the results by. Specify the attribute to sort by using JavaScript object notation. For example, to sort by title use sort=media.metadata.title. When filtering for a series, sort can also be sequence.</param>
+        /// <param name="sortByDesc">Whether to reverse the sort order.</param>
+        /// <param name="filter">What to filter the results by.</param>
+        /// <returns></returns>
+        public async Task<Response<GetLibraryItemResponse<BookCollection>>> GetBookLibraryCollections(string id, int limit = 0, int page = 0, string sortBy = null, bool sortByDesc = false, IFilter filter = null)
+        {
+            return await GetLibraryCollections<BookCollection>(id, limit, page, sortBy, sortByDesc, filter, false, null);
+        }
+
+        /// <summary>
+        /// This endpoint returns a library's collections. Optionally sorted and/or filtered.
+        /// </summary>
+        /// <param name="id">The ID of the library.</param>
+        /// <param name="limit">Limit the number of returned results per page. If 0, no limit will be applied.</param>
+        /// <param name="page">The page number (0 indexed) to request. If there is no limit applied, then page will have no effect and all results will be returned.</param>
+        /// <param name="sortBy">What to sort the results by. Specify the attribute to sort by using JavaScript object notation. For example, to sort by title use sort=media.metadata.title. When filtering for a series, sort can also be sequence.</param>
+        /// <param name="sortByDesc">Whether to reverse the sort order.</param>
+        /// <param name="filter">What to filter the results by.</param>
+        /// <returns></returns>
+        public async Task<Response<GetLibraryItemResponse<BookCollectionMinified>>> GetBookLibraryCollectionsMinified(string id, int limit = 0, int page = 0, string sortBy = null, bool sortByDesc = false, IFilter filter = null)
+        {
+            return await GetLibraryCollections<BookCollectionMinified>(id, limit, page, sortBy, sortByDesc, filter, true, null);
+        }
+        #endregion
+
+        #region Libraries_GetLibraryPlaylists
+        /// <summary>
+        /// This endpoint returns a library's playlists for the authenticated user.
+        /// </summary>
+        /// <typeparam name="TLibraryItemType">The returned type. This depends if it is a library of books or podcasts. See GetBookLibraryUserPlaylists and GetPodcastLibraryUserPlaylists.</typeparam>
+        /// <param name="id">The ID of the library.</param>
+        /// <param name="limit">Limit the number of returned results per page. If 0, no limit will be applied.</param>
+        /// <param name="page">The page number (0 indexed) to request. If there is no limit applied, then page will have no effect and all results will be returned.</param>
+        /// <returns></returns>
+        private async Task<Response<GetLibraryUserPlaylistsResponse<TLibraryItemType>>> GetLibraryUserPlaylists<TLibraryItemType>(string id, int limit = 0, int page = 0)
+        {
+            return await _httpClient.GetAsync<GetLibraryUserPlaylistsResponse<TLibraryItemType>>($"/api/libraries/{id}/playlists?limit={limit}&page={page}");
+        }
+
+        /// <summary>
+        /// This endpoint returns a library's playlists for the authenticated user. This assumes it is a library of books.
+        /// </summary>
+        /// <param name="id">The ID of the library.</param>
+        /// <param name="limit">Limit the number of returned results per page. If 0, no limit will be applied.</param>
+        /// <param name="page">The page number (0 indexed) to request. If there is no limit applied, then page will have no effect and all results will be returned.</param>
+        /// <returns></returns>
+        public async Task<Response<GetLibraryUserPlaylistsResponse<BookLibraryItemExpanded>>> GetBookLibraryUserPlaylists(string id, int limit = 0, int page = 0)
+        {
+            return await GetLibraryUserPlaylists<BookLibraryItemExpanded>(id, limit, page);
+        }
+
+        /// <summary>
+        /// This endpoint returns a library's playlists for the authenticated user. This assumes it is a library of podcasts.
+        /// </summary>
+        /// <param name="id">The ID of the library.</param>
+        /// <param name="limit">Limit the number of returned results per page. If 0, no limit will be applied.</param>
+        /// <param name="page">The page number (0 indexed) to request. If there is no limit applied, then page will have no effect and all results will be returned.</param>
+        /// <returns></returns>
+        public async Task<Response<GetLibraryUserPlaylistsResponse<PodcastLibraryItemMinified>>> GetPodcastLibraryUserPlaylists(string id, int limit = 0, int page = 0)
+        {
+            return await GetLibraryUserPlaylists<PodcastLibraryItemMinified>(id, limit, page);
+        }
+        #endregion
+
+        /// <summary>
+        /// This endpoint returns a library's personalized view for home page display.
+        /// </summary>
+        /// <param name="id">The ID of the library.</param>
+        /// <param name="limit">Limit the number of items in each 'shelf' of the response. Default value is 10.</param>
+        /// <returns></returns>
+        public async Task<Response<Shelf[]>> GetLibraryPersonalizedView(string id, int limit = 10)
+        {
+            return await _httpClient.GetAsync<Shelf[]>($"/api/libraries/{id}/personalized?limit={limit}");
+        }
+
+        /// <summary>
+        /// This endpoint returns a library's filter data that can be used for displaying a filter list.
+        /// </summary>
+        /// <param name="id">The ID of the library.</param>
+        /// <returns></returns>
+        public async Task<Response<LibraryFilterData>> GetLibraryFilterData(string id)
+        {
+            return await _httpClient.GetAsync<LibraryFilterData>($"/api/libraries/{id}/filterdata");
+        }
+
+        /// <summary>
+        /// This endpoint searches a library for the query and returns the results.
+        /// </summary>
+        /// <param name="id">The ID of the library.</param>
+        /// <param name="query">The search query.</param>
+        /// <param name="limit">Limit the number of returned results.</param>
+        /// <returns></returns>
+        public async Task<Response<SearchLibraryResponse>> SearchLibrary(string id, string query, int limit = 12)
+        {
+            return await _httpClient.GetAsync<SearchLibraryResponse>($"/api/libraries/{id}/search?q={HttpUtility.UrlEncode(query)}&limit={limit}");
+        }
+
+        /// <summary>
+        /// This endpoint returns a library's stats.
+        /// </summary>
+        /// <param name="id">The ID of the library.</param>
+        /// <returns></returns>
+        public async Task<Response<GetLibraryStatsResponse>> GetLibraryStats(string id)
+        {
+            return await _httpClient.GetAsync<GetLibraryStatsResponse>($"/api/libraries/{id}/stats");
+        }
+
+        /// <summary>
+        /// This endpoint returns a library's authors.
+        /// </summary>
+        /// <param name="id">The ID of the library.</param>
+        /// <returns></returns>
+        public async Task<Response<GetLibraryAuthorsResponse>> GetLibraryAuthors(string id)
+        {
+            return await _httpClient.GetAsync<GetLibraryAuthorsResponse>($"/api/libraries/{id}/authors");
         }
         #endregion
     }

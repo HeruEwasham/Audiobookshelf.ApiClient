@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 
 namespace Audiobookshelf.ApiClient.Dto
 {
-	public class SeriesBooks : SeriesBaseWithAddedAt
+	public class SeriesBooks<TLibraryItem> : SeriesBaseWithAddedAt
 	{
         /// <summary>
         /// The name of the series with any prefix moved to the end.
@@ -28,7 +28,7 @@ namespace Audiobookshelf.ApiClient.Dto
         /// The library items that contain the books in the series. A sequence attribute that denotes the position in the series the book is in, is tacked on.
         /// </summary>
         [JsonProperty("books")]
-        public LibraryItem<Book>[] Books { get; private set; }
+        public TLibraryItem[] Books { get; private set; }
 
         /// <summary>
         /// The combined duration of all books in the series.
