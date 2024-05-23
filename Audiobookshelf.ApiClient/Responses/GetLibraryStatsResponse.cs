@@ -1,13 +1,11 @@
 ﻿using System;
-using System.Drawing;
-using Audiobookshelf.ApiClient.Dto;
 using Audiobookshelf.ApiClient.Dto.Stats;
 using Audiobookshelf.ApiClient.JsonConverters;
 using Newtonsoft.Json;
 
 namespace Audiobookshelf.ApiClient.Responses
 {
-	public class GetLibraryStatsResponse
+    public class GetLibraryStatsResponse
 	{
         /// <summary>
         /// The total amount of library items in the library.

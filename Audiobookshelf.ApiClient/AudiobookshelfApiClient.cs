@@ -533,6 +533,49 @@ namespace Audiobookshelf.ApiClient
         {
             return await _httpClient.GetAsync<GetLibraryAuthorsResponse>($"/api/libraries/{id}/authors");
         }
+
+        /// <summary>
+        /// This endpoint matches all items in a library using quick match. Quick match populates empty book details and the cover with the first book result from the library's default metadata provider. Does not overwrite details unless the "Prefer matched metadata" server setting is enabled.
+        /// </summary>
+        /// <param name="id">The ID of the library.</param>
+        /// <returns></returns>
+        public async Task<Response<string>> MatchAllLibraryItems(string id)
+        {
+            return await _httpClient.GetAsync<string>($"/api/libraries/{id}/matchall");
+        }
+
+        /// <summary>
+        /// This endpoint starts a scan of a library's folders for new library items and changes to existing library items.
+        /// </summary>
+        /// <param name="id">The ID of the library.</param>
+        /// <param name="force">Whether to force a rescan for all of a library's items.</param>
+        /// <returns></returns>
+        public async Task<Response<string>> ScanLibraryFolders(string id, bool force)
+        {
+            return await _httpClient.PostAsync<string>($"/api/libraries/{id}/scan?force={force.ToInt()}", null);
+        }
+
+        /// <summary>
+        /// This endpoint returns a library's newest unfinished podcast episodes, sorted by episode publish time.
+        /// </summary>
+        /// <param name="id">The ID of the library.</param>
+        /// <param name="limit">Limit the number of returned results per page. If 0, no limit will be applied.</param>
+        /// <param name="page">The page number (0 indexed) to request. If there is no limit applied, then page will have no effect and all results will be returned.</param>
+        /// <returns></returns>
+        public async Task<Response<GetLibraryRecentEpisodesResponse>> GetLibraryRecentEpisodes(string id, int limit = 0, int page = 0)
+        {
+            return await _httpClient.GetAsync<GetLibraryRecentEpisodesResponse>($"/api/libraries/{id}/recent-episodes?limit={limit}&page={page}");
+        }
+
+        /// <summary>
+        /// This endpoint will change the displayOrder of the libraries specified. It will return an array of all libraries.
+        /// </summary>
+        /// <param name="request">Array of library-representations to reorder.</param>
+        /// <returns></returns>
+        public async Task<Response<Library[]>> ReorderLibraryList(ReorderLibraryListRequest[] request)
+        {
+            return await _httpClient.PostAsync<Library[]>($"/api/libraries/order", request);
+        }
         #endregion
     }
 }
