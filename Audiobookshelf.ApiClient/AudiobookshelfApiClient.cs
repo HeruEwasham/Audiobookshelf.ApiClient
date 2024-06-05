@@ -211,7 +211,7 @@ namespace Audiobookshelf.ApiClient
         /// <param name="collapseseries">Whether to collapse books in a series to a single entry.</param>
         /// <param name="include">A comma separated list of what to include with the library items. The only current option is rssfeed.</param>
         /// <returns></returns>
-        public async Task<Response<GetLibraryItemResponse<TLibraryItemType>>> GetLibraryItems<TLibraryItemType>(string id, int limit = 0, int page = 0, string sortBy = null, bool sortByDesc = false, IFilter filter = null, bool minified = false, bool collapseseries = false, string include = null)
+        public async Task<Response<GetLibraryItemsResponse<TLibraryItemType>>> GetLibraryItems<TLibraryItemType>(string id, int limit = 0, int page = 0, string sortBy = null, bool sortByDesc = false, IFilter filter = null, bool minified = false, bool collapseseries = false, string include = null)
         {
             var query = string.Empty;
             if (sortBy != null)
@@ -226,7 +226,7 @@ namespace Audiobookshelf.ApiClient
             {
                 query += $"&include={include}";
             }
-            return await _httpClient.GetAsync<GetLibraryItemResponse<TLibraryItemType>>($"/api/libraries/{id}/items?limit={limit}&page={page}&desc={sortByDesc}&minified={minified.ToInt()}&collapseseries={collapseseries.ToInt()}{query}");
+            return await _httpClient.GetAsync<GetLibraryItemsResponse<TLibraryItemType>>($"/api/libraries/{id}/items?limit={limit}&page={page}&desc={sortByDesc}&minified={minified.ToInt()}&collapseseries={collapseseries.ToInt()}{query}");
         }
 
         /// <summary>
@@ -239,7 +239,7 @@ namespace Audiobookshelf.ApiClient
         /// <param name="sortByDesc">Whether to reverse the sort order.</param>
         /// <param name="filter">What to filter the results by.</param>
         /// <returns></returns>
-        public async Task<Response<GetLibraryItemResponse<BookLibraryItem>>> GetBookLibraryItems(string id, int limit = 0, int page = 0, string sortBy = null, bool sortByDesc = false, IFilter filter = null)
+        public async Task<Response<GetLibraryItemsResponse<BookLibraryItem>>> GetBookLibraryItems(string id, int limit = 0, int page = 0, string sortBy = null, bool sortByDesc = false, IFilter filter = null)
         {
             return await GetLibraryItems<BookLibraryItem>(id, limit, page, sortBy, sortByDesc, filter, false, false, null);
         }
@@ -254,7 +254,7 @@ namespace Audiobookshelf.ApiClient
         /// <param name="sortByDesc">Whether to reverse the sort order.</param>
         /// <param name="filter">What to filter the results by.</param>
         /// <returns></returns>
-        public async Task<Response<GetLibraryItemResponse<BookLibraryItemMinified>>> GetBookLibraryItemsMinified(string id, int limit = 0, int page = 0, string sortBy = null, bool sortByDesc = false, IFilter filter = null)
+        public async Task<Response<GetLibraryItemsResponse<BookLibraryItemMinified>>> GetBookLibraryItemsMinified(string id, int limit = 0, int page = 0, string sortBy = null, bool sortByDesc = false, IFilter filter = null)
         {
             return await GetLibraryItems<BookLibraryItemMinified>(id, limit, page, sortBy, sortByDesc, filter, true, false, null);
         }
@@ -269,7 +269,7 @@ namespace Audiobookshelf.ApiClient
         /// <param name="sortByDesc">Whether to reverse the sort order.</param>
         /// <param name="filter">What to filter the results by.</param>
         /// <returns></returns>
-        public async Task<Response<GetLibraryItemResponse<PodcastLibraryItem>>> GetPodcastLibraryItems(string id, int limit = 0, int page = 0, string sortBy = null, bool sortByDesc = false, IFilter filter = null)
+        public async Task<Response<GetLibraryItemsResponse<PodcastLibraryItem>>> GetPodcastLibraryItems(string id, int limit = 0, int page = 0, string sortBy = null, bool sortByDesc = false, IFilter filter = null)
         {
             return await GetLibraryItems<PodcastLibraryItem>(id, limit, page, sortBy, sortByDesc, filter, false, false, null);
         }
@@ -284,7 +284,7 @@ namespace Audiobookshelf.ApiClient
         /// <param name="sortByDesc">Whether to reverse the sort order.</param>
         /// <param name="filter">What to filter the results by.</param>
         /// <returns></returns>
-        public async Task<Response<GetLibraryItemResponse<PodcastLibraryItemMinified>>> GetPodcastLibraryItemsMinified(string id, int limit = 0, int page = 0, string sortBy = null, bool sortByDesc = false, IFilter filter = null)
+        public async Task<Response<GetLibraryItemsResponse<PodcastLibraryItemMinified>>> GetPodcastLibraryItemsMinified(string id, int limit = 0, int page = 0, string sortBy = null, bool sortByDesc = false, IFilter filter = null)
         {
             return await GetLibraryItems<PodcastLibraryItemMinified>(id, limit, page, sortBy, sortByDesc, filter, true, false, null);
         }
@@ -327,7 +327,7 @@ namespace Audiobookshelf.ApiClient
         /// <param name="minified">Whether to request minified objects.</param>
         /// <param name="include">A comma separated list of what to include with the library items. The only current option is rssfeed.</param>
         /// <returns></returns>
-        public async Task<Response<GetLibraryItemResponse<SeriesBooks<TLibraryItemType>>>> GetLibrarySeries<TLibraryItemType>(string id, int limit = 0, int page = 0, string sortBy = null, bool sortByDesc = false, IFilter filter = null, bool minified = false, string include = null)
+        public async Task<Response<GetLibraryItemsResponse<SeriesBooks<TLibraryItemType>>>> GetLibrarySeries<TLibraryItemType>(string id, int limit = 0, int page = 0, string sortBy = null, bool sortByDesc = false, IFilter filter = null, bool minified = false, string include = null)
         {
             var query = string.Empty;
             if (sortBy != null)
@@ -342,7 +342,7 @@ namespace Audiobookshelf.ApiClient
             {
                 query += $"&include={include}";
             }
-            return await _httpClient.GetAsync<GetLibraryItemResponse<SeriesBooks<TLibraryItemType>>>($"/api/libraries/{id}/series?limit={limit}&page={page}&desc={sortByDesc}&minified={minified.ToInt()}{query}");
+            return await _httpClient.GetAsync<GetLibraryItemsResponse<SeriesBooks<TLibraryItemType>>>($"/api/libraries/{id}/series?limit={limit}&page={page}&desc={sortByDesc}&minified={minified.ToInt()}{query}");
         }
 
         /// <summary>
@@ -355,7 +355,7 @@ namespace Audiobookshelf.ApiClient
         /// <param name="sortByDesc">Whether to reverse the sort order.</param>
         /// <param name="filter">What to filter the results by.</param>
         /// <returns></returns>
-        public async Task<Response<GetLibraryItemResponse<SeriesBooks<BookLibraryItem>>>> GetBookLibrarySeries(string id, int limit = 0, int page = 0, string sortBy = null, bool sortByDesc = false, IFilter filter = null)
+        public async Task<Response<GetLibraryItemsResponse<SeriesBooks<BookLibraryItem>>>> GetBookLibrarySeries(string id, int limit = 0, int page = 0, string sortBy = null, bool sortByDesc = false, IFilter filter = null)
         {
             return await GetLibrarySeries<BookLibraryItem>(id, limit, page, sortBy, sortByDesc, filter, false, null);
         }
@@ -370,7 +370,7 @@ namespace Audiobookshelf.ApiClient
         /// <param name="sortByDesc">Whether to reverse the sort order.</param>
         /// <param name="filter">What to filter the results by.</param>
         /// <returns></returns>
-        public async Task<Response<GetLibraryItemResponse<SeriesBooks<BookLibraryItemMinified>>>> GetBookLibrarySeriesMinified(string id, int limit = 0, int page = 0, string sortBy = null, bool sortByDesc = false, IFilter filter = null)
+        public async Task<Response<GetLibraryItemsResponse<SeriesBooks<BookLibraryItemMinified>>>> GetBookLibrarySeriesMinified(string id, int limit = 0, int page = 0, string sortBy = null, bool sortByDesc = false, IFilter filter = null)
         {
             return await GetLibrarySeries<BookLibraryItemMinified>(id, limit, page, sortBy, sortByDesc, filter, true, null);
         }
@@ -393,7 +393,7 @@ namespace Audiobookshelf.ApiClient
         /// <param name="minified">Whether to request minified objects.</param>
         /// <param name="include">A comma separated list of what to include with the library items. The only current option is rssfeed.</param>
         /// <returns></returns>
-        public async Task<Response<GetLibraryItemResponse<TLibraryItemType>>> GetLibraryCollections<TLibraryItemType>(string id, int limit = 0, int page = 0, string sortBy = null, bool sortByDesc = false, IFilter filter = null, bool minified = false, string include = null)
+        public async Task<Response<GetLibraryItemsResponse<TLibraryItemType>>> GetLibraryCollections<TLibraryItemType>(string id, int limit = 0, int page = 0, string sortBy = null, bool sortByDesc = false, IFilter filter = null, bool minified = false, string include = null)
         {
             var query = string.Empty;
             if (sortBy != null)
@@ -408,7 +408,7 @@ namespace Audiobookshelf.ApiClient
             {
                 query += $"&include={include}";
             }
-            return await _httpClient.GetAsync<GetLibraryItemResponse<TLibraryItemType>>($"/api/libraries/{id}/collections?limit={limit}&page={page}&desc={sortByDesc}&minified={minified.ToInt()}{query}");
+            return await _httpClient.GetAsync<GetLibraryItemsResponse<TLibraryItemType>>($"/api/libraries/{id}/collections?limit={limit}&page={page}&desc={sortByDesc}&minified={minified.ToInt()}{query}");
         }
 
         /// <summary>
@@ -421,7 +421,7 @@ namespace Audiobookshelf.ApiClient
         /// <param name="sortByDesc">Whether to reverse the sort order.</param>
         /// <param name="filter">What to filter the results by.</param>
         /// <returns></returns>
-        public async Task<Response<GetLibraryItemResponse<BookCollection>>> GetBookLibraryCollections(string id, int limit = 0, int page = 0, string sortBy = null, bool sortByDesc = false, IFilter filter = null)
+        public async Task<Response<GetLibraryItemsResponse<BookCollection>>> GetBookLibraryCollections(string id, int limit = 0, int page = 0, string sortBy = null, bool sortByDesc = false, IFilter filter = null)
         {
             return await GetLibraryCollections<BookCollection>(id, limit, page, sortBy, sortByDesc, filter, false, null);
         }
@@ -436,7 +436,7 @@ namespace Audiobookshelf.ApiClient
         /// <param name="sortByDesc">Whether to reverse the sort order.</param>
         /// <param name="filter">What to filter the results by.</param>
         /// <returns></returns>
-        public async Task<Response<GetLibraryItemResponse<BookCollectionMinified>>> GetBookLibraryCollectionsMinified(string id, int limit = 0, int page = 0, string sortBy = null, bool sortByDesc = false, IFilter filter = null)
+        public async Task<Response<GetLibraryItemsResponse<BookCollectionMinified>>> GetBookLibraryCollectionsMinified(string id, int limit = 0, int page = 0, string sortBy = null, bool sortByDesc = false, IFilter filter = null)
         {
             return await GetLibraryCollections<BookCollectionMinified>(id, limit, page, sortBy, sortByDesc, filter, true, null);
         }
@@ -575,6 +575,114 @@ namespace Audiobookshelf.ApiClient
         public async Task<Response<Library[]>> ReorderLibraryList(ReorderLibraryListRequest[] request)
         {
             return await _httpClient.PostAsync<Library[]>($"/api/libraries/order", request);
+        }
+        #endregion
+
+        #region LibraryItems
+        /// <summary>
+        /// This endpoint will delete all library items from the database. No actual files will be deleted.
+        /// </summary>
+        /// <returns></returns>
+        public async Task<Response<string>> DeleteAllLibraryItems()
+        {
+            return await _httpClient.DeleteAsync<string>($"/api/items/all");
+        }
+
+        #region LibraryItems_GetLibraryItem
+        /// <summary>
+        /// This endpoint retrieves a library item.
+        ///
+        /// Expects the item to be a book-related item.
+        /// </summary>
+        /// <param name="id">The ID of the library item to retrieve.</param>
+        /// <returns></returns>
+        public async Task<Response<LibraryItem<Book>>> GetBookLibraryItem(string id)
+        {
+            return await _httpClient.GetAsync<LibraryItem<Book>>($"/api/items/{id}?expanded=0");
+        }
+
+        /// <summary>
+        /// This endpoint retrieves a library item.
+        ///
+        /// Expects the item to be a podcast-related item.
+        /// </summary>
+        /// <param name="id">The ID of the library item to retrieve.</param>
+        /// <returns></returns>
+        public async Task<Response<LibraryItem<Podcast>>> GetPodcastLibraryItem(string id)
+        {
+            return await _httpClient.GetAsync<LibraryItem<Podcast>>($"/api/items/{id}?expanded=0");
+        }
+
+        /// <summary>
+        /// This endpoint retrieves an expanded library item with all possible includes.
+        ///
+        /// Expects the item to be a book-related item.
+        /// </summary>
+        /// <param name="id">The ID of the library item to retrieve.</param>
+        /// <returns></returns>
+        public async Task<Response<GetBookLibraryItemExpanded>> GetBookLibraryItemExpanded(string id)
+        {
+            return await _httpClient.GetAsync<GetBookLibraryItemExpanded>($"/api/items/{id}?expanded=1&include=progress,rssfeed,authors");
+        }
+
+        /// <summary>
+        /// This endpoint retrieves an expanded library item with all possible includes.
+        ///
+        /// Expects the item to be a podcast-related item.
+        /// </summary>
+        /// <param name="id">The ID of the library item to retrieve.</param>
+        /// <returns></returns>
+        public async Task<Response<GetPodcastLibraryItemExpanded>> GetPodcastLibraryItemExpanded(string id, string episodeId)
+        {
+            return await _httpClient.GetAsync<GetPodcastLibraryItemExpanded>($"/api/items/{id}?expanded=1&include=progress,rssfeed,downloads&episode={episodeId}");
+        }
+        #endregion
+
+        /// <summary>
+        /// This endpoint deletes a library item from the database. No files are deleted.
+        /// </summary>
+        /// <param name="id">The ID of the library item to delete.</param>
+        /// <returns></returns>
+        public async Task<Response<string>> DeleteLibraryItem(string id)
+        {
+            return await _httpClient.DeleteAsync<string>($"/api/items/{id}");
+        }
+
+        /// <summary>
+        /// This endpoint updates a library item's media and returns the updated library item.
+        /// </summary>
+        /// <param name="id">The ID of the library item.</param>
+        /// <param name="request">The request. Mark that this endpoint expect that all fields in the request that should not change is filled out. The request has helper methods to create a request based on some entities for this purpuse.</param>
+        /// <returns></returns>
+        public async Task<Response<UpdateLibraryItemMediaResponse<Book>>> UpdateLibraryItemMedia(string id, UpdateLibraryItemMediaBookRequest request)
+        {
+            return await _httpClient.PatchAsync<UpdateLibraryItemMediaResponse<Book>>($"/api/items/{id}/media", request);
+        }
+
+        /// <summary>
+        /// This endpoint updates a library item's media and returns the updated library item.
+        /// </summary>
+        /// <param name="id">The ID of the library item.</param>
+        /// <param name="request">The request. Mark that this endpoint expect that all fields in the request that should not change is filled out.</param>
+        /// <returns></returns>
+        public async Task<Response<UpdateLibraryItemMediaResponse<Podcast>>> UpdateLibraryItemMedia(string id, PodcastBase<PodcastMetadata> request)
+        {
+            return await _httpClient.PatchAsync<UpdateLibraryItemMediaResponse<Podcast>>($"/api/items/{id}/media", request);
+        }
+
+        public async Task<byte[]> GetLibraryItemCover(string id, int width = 400, int? height = null, ImageFormat format = ImageFormat.Jpeg)
+        {
+            var url = $"/api/items/{id}/cover?raw=0&width={width}&format={format}";
+            if (height.HasValue)
+            {
+                url += $"&height={height.Value}";
+            }
+            return await _httpClient.GetByteArrayAsync(url);
+        }
+
+        public async Task<byte[]> GetLibraryItemCoverRaw(string id)
+        {
+            return await _httpClient.GetByteArrayAsync($"/api/items/{id}/cover?raw=1");
         }
         #endregion
     }

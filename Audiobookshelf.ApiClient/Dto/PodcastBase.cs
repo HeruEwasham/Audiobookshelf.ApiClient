@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 
 namespace Audiobookshelf.ApiClient.Dto
 {
-    public abstract class PodcastBase<TPodcastMetadata> where TPodcastMetadata : PodcastMetadata
+    public class PodcastBase<TPodcastMetadata> where TPodcastMetadata : PodcastMetadata
     {
         /// <summary>
         /// The metadata for the podcast.

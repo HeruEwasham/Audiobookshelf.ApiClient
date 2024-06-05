@@ -2,12 +2,12 @@
 
 namespace Audiobookshelf.ApiClient.Dto
 {
-    public class SeriesSequence : SeriesBaseWithId
+    public class SeriesSequenceWithoutId : SeriesBase
     {
         /// <summary>
         /// The position in the series the book is.
         /// </summary>
         [JsonProperty("sequence")]
-        public string Sequence { get; private set; }
+        public string Sequence { get; set; }
     }
 }

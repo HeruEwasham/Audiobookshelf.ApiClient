@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 
 namespace Audiobookshelf.ApiClient.Dto
 {
-	public abstract class SeriesBaseWithAddedAt : SeriesBase
+	public abstract class SeriesBaseWithAddedAt : SeriesBaseWithId
 	{
         /// <summary>
         /// The time when the series was added.

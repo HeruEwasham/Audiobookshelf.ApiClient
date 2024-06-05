@@ -1,4 +1,4 @@
 ﻿namespace Audiobookshelf.ApiClient.Dto
 {
-    public class AuthorMinified : AuthorBase { }
+    public class AuthorMinified : AuthorBaseWithId { }
 }

@@ -2,7 +2,9 @@
 
 namespace Audiobookshelf.ApiClient.Dto
 {
-    public class BookMetadataExpanded : BookMetadata
+    public class BookMetadataExpanded : BookMetadataExpanded<AuthorExpanded, SeriesSequence> { }
+
+    public class BookMetadataExpanded<TAuthorInfoType, TSeriesSequence> : BookMetadata<TAuthorInfoType, TSeriesSequence> where TAuthorInfoType : AuthorBase where TSeriesSequence : SeriesBase
     {
         /// <summary>
         /// The title of the book with any prefix moved to the end.

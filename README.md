@@ -41,10 +41,18 @@ Mark that some endpoints/features might not be mentioned directly, but might sti
 - Search in the given library.
 - Get a library's stats.
 - Get a library's authors.
-- Match All of a Library's Items
-- Scan a Library's Folders
-- Get a Library's Recent Episodes
-- Reorder Library List
+- Match All of a Library's Items.
+- Scan a Library's Folders.
+- Get a Library's Recent Episodes.
+- Reorder Library List.
+
+### Library items
+
+- Delete all library items.
+- Get a library item.
+- Delete a library item.
+- Update a library item's media.
+- Get a library item's cover.
 
 ## Licenses
 

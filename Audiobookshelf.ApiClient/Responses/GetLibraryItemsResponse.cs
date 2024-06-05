@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 
 namespace Audiobookshelf.ApiClient.Responses
 {
-    public class GetLibraryItemResponse<TLibraryItemType> : LibraryResultsResponse<TLibraryItemType>
+    public class GetLibraryItemsResponse<TLibraryItemType> : LibraryResultsResponse<TLibraryItemType>
     {
         /// <summary>
         /// The sort set in the request. Will not exist if no sort was set.

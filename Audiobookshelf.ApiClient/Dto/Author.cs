@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 
 namespace Audiobookshelf.ApiClient.Dto
 {
-	public class Author : AuthorBase
+	public class Author : AuthorBaseWithId
 	{
         /// <summary>
         /// The ASIN of the author. Will be null if unknown.

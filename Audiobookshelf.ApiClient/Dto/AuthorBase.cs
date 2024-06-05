@@ -2,18 +2,12 @@
 
 namespace Audiobookshelf.ApiClient.Dto
 {
-    public abstract class AuthorBase
+    public class AuthorBase
     {
-        /// <summary>
-        /// The ID of the author.
-        /// </summary>
-        [JsonProperty("id")]
-        public string Id { get; private set; }
-
         /// <summary>
         /// The name of the author.
         /// </summary>
         [JsonProperty("name")]
-        public string Name { get; private set; }
+        public string Name { get; set; }
     }
 }

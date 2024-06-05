@@ -4,7 +4,7 @@ namespace Audiobookshelf.ApiClient.Dto
 {
     public class Book : Book<BookMetadata> { }
 
-    public abstract class Book<TBookMetadata> : BookBase<TBookMetadata> where TBookMetadata : BookMetadata
+    public abstract class Book<TBookMetadata> : BookBase<TBookMetadata> where TBookMetadata : BookMetadataBase
     {
         /// <summary>
         /// The ID of the library item that contains the book.

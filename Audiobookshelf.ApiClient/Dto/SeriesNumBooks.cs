@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 
 namespace Audiobookshelf.ApiClient.Dto
 {
-	public class SeriesNumBooks : SeriesBase
+	public class SeriesNumBooks : SeriesBaseWithId
 	{
         /// <summary>
         /// The name of the series with any prefix moved to the end.

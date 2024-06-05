@@ -2,24 +2,26 @@
 
 namespace Audiobookshelf.ApiClient.Dto
 {
-    public class BookMetadata : BookMetadataBase
+    public class BookMetadata : BookMetadata<AuthorMinified, SeriesSequence> { }
+
+    public class BookMetadata<TAuthorInfoType, TSeriesSequence> : BookMetadataBase where TAuthorInfoType : AuthorBase where TSeriesSequence : SeriesBase
     {
         /// <summary>
         /// The authors of the book.
         /// </summary>
         [JsonProperty("authors")]
-        public AuthorMinified[] Authors { get; private set; }
+        public TAuthorInfoType[] Authors { get; set; }
 
         /// <summary>
         /// The narrators of the audiobook.
         /// </summary>
         [JsonProperty("narrators")]
-        public string[] Narrators { get; private set; }
+        public string[] Narrators { get; set; }
 
         /// <summary>
         /// The series the book belongs to.
         /// </summary>
         [JsonProperty("series")]
-        public SeriesSequence[] Series { get; private set; }
+        public TSeriesSequence[] Series { get; set; }
     }
 }

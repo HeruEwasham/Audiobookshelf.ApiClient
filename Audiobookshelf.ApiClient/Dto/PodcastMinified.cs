@@ -1,9 +1,8 @@
-﻿using System;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
 namespace Audiobookshelf.ApiClient.Dto
 {
-	public class PodcastMinified : PodcastBase<PodcastMetadataMinified>
+    public class PodcastMinified : PodcastBase<PodcastMetadataMinified>
 	{
         /// <summary>
         /// The number of downloaded episodes for the podcast.
