@@ -670,6 +670,14 @@ namespace Audiobookshelf.ApiClient
             return await _httpClient.PatchAsync<UpdateLibraryItemMediaResponse<Podcast>>($"/api/items/{id}/media", request);
         }
 
+        /// <summary>
+        /// This endpoint retrieves a library item's cover.
+        /// </summary>
+        /// <param name="id">The ID of the library item.</param>
+        /// <param name="width">The requested width of the cover image.</param>
+        /// <param name="height">The requested height of the cover image. If null the image is scaled proportionately.</param>
+        /// <param name="format">The requested format of the cover image.</param>
+        /// <returns></returns>
         public async Task<byte[]> GetLibraryItemCover(string id, int width = 400, int? height = null, ImageFormat format = ImageFormat.Jpeg)
         {
             var url = $"/api/items/{id}/cover?raw=0&width={width}&format={format}";
@@ -680,6 +688,11 @@ namespace Audiobookshelf.ApiClient
             return await _httpClient.GetByteArrayAsync(url);
         }
 
+        /// <summary>
+        /// This endpoint retrieves a library item's cover. Returns the raw cover image file instead of a scaled version
+        /// </summary>
+        /// <param name="id">The ID of the library item.</param>
+        /// <returns></returns>
         public async Task<byte[]> GetLibraryItemCoverRaw(string id)
         {
             return await _httpClient.GetByteArrayAsync($"/api/items/{id}/cover?raw=1");
